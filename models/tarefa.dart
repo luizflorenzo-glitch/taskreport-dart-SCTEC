@@ -25,6 +25,16 @@ class Tarefa extends ItemTrabalho {
   void exibirResumo() {
     print('ID: $id - Título: $titulo - Responsável: $responsavel - Status: $status - Prioridade: $prioridade - Valor: ${valor != null ? 'R\$ ${valor!.toStringAsFixed(2)}' : 'N/A'} - Horas: ${horas != null ? horas.toString() : 'N/A'}');
   }
-
+factory Tarefa.fromMap(Map<String, dynamic> map) {
+    return Tarefa(
+      id: map['id'],
+      titulo: map['titulo']?.toString().trim() ?? 'Sem título',
+      responsavel: map['responsavel']?.toString().trim() ?? 'Não Informado',
+      status: map['status']?.toString().trim() ?? 'Sem status',
+      prioridade: map['prioridade']?.toString().trim() ?? 'Sem prioridade',
+      valor: map['valor'] != null ? double.tryParse(map['valor'].toString().replaceAll('R\$', '').replaceAll(',', '.').replaceAll(' ', '')) : null,
+      horas: int.tryParse(map['horas']?.toString() ?? '0') ?? 0,
+    );
+  }
 }
 
