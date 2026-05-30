@@ -74,8 +74,8 @@ print ('============= FILTROS =============\n');
   print ('\nTarefas com Dados Incompletos:');
     tarefasIncompletas.forEach((tarefa) => print(tarefa));
 
-}  
+  DateTime dataAtual = DateTime.now();
+   print('\nRelatório gerado em : ${dataAtual.day.toString().padLeft(2, '0')}/${dataAtual.month.toString().padLeft(2, '0')}/${dataAtual.year} ${dataAtual.hour.toString().padLeft(2, '0')}:${dataAtual.minute.toString().padLeft(2, '0')}:${dataAtual.second.toString().padLeft(2, '0')}\n');
 
-
-
+}
 
