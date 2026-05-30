@@ -5,62 +5,77 @@ import 'models/tarefa.dart';
 void main() {
   List<Tarefa> tarefas = dadosTarefas.map((map) => Tarefa.fromMap(map)).toList();
 
-  for (var tarefa in tarefas) {
-    tarefa.exibirResumo();
+ print('============= LISTA DE TAREFAS =============\n');
+  for (Tarefa tarefa in tarefas) {
+  tarefa.exibirResumo();
   }
+
+print ('============= FILTROS =============\n');
+
   List<Tarefa> tarefasConcluidas = tarefas.where((tarefa) => tarefa.status == 'concluida').toList();
-  print('\nTarefas Concluídas:'); 
-  for (var tarefa in tarefasConcluidas) {
-    tarefa.exibirResumo();
+  print('Tarefas Concluídas:'); 
+  for (Tarefa tarefa in tarefasConcluidas) {
+    print('- ${tarefa.titulo}');
   }
   List<Tarefa> tarefasPendentes = tarefas.where((tarefa) => tarefa.status == 'pendente').toList();
   print('\nTarefas Pendentes:');
-  for (var tarefa in tarefasPendentes) {
-    tarefa.exibirResumo();
+  for (Tarefa tarefa in tarefasPendentes) {
+    print('- ${tarefa.titulo}');
   }
   List<Tarefa> tarefasEmAndamento = tarefas.where((tarefa) => tarefa.status == 'em andamento').toList();
   print('\nTarefas em Andamento:');
-  for (var tarefa in tarefasEmAndamento) {
-    tarefa.exibirResumo();
+  for (Tarefa tarefa in tarefasEmAndamento) {
+    print('- ${tarefa.titulo}');
   }
   List<Tarefa> tarefasCanceladas = tarefas.where((tarefa) => tarefa.status == 'cancelada').toList();
   print('\nTarefas Canceladas:');
-  for (var tarefa in tarefasCanceladas) {
-    tarefa.exibirResumo();
+  for (Tarefa tarefa in tarefasCanceladas) {
+    print('- ${tarefa.titulo}');
   }
 
-  double totalValor = tarefasConcluidas.fold(0, (total, tarefa) => total + (tarefa.valor ?? 0));
-  print('\nValor Total das Tarefas: $totalValor');
+  double totalValor = tarefasConcluidas.isEmpty ? 0.0 : tarefasConcluidas.map((tarefa) => tarefa.valor ?? 0.0).reduce((a, b) => a + b);
 
-
-  double totalPendentes= tarefasPendentes.fold(0, (total, tarefa) => total + (tarefa.valor ?? 0));
+  double totalPendentes = tarefasPendentes.isEmpty ? 0.0 : tarefasPendentes.map((tarefa) => tarefa.valor ?? 0.0).reduce((a, b) => a + b);
   double mediaPendentes = tarefasPendentes.isNotEmpty ? totalPendentes / tarefasPendentes.length : 0;
-  print('Valor Médio das Tarefas Pendentes: $mediaPendentes');
+  
 
   Map<String, int> horasPorStatus = {};
-  for (var tarefa in tarefas) {
+  for (Tarefa tarefa in tarefas) {
     String status = tarefa.status ?? 'Sem status';
     horasPorStatus[status] = (horasPorStatus[status] ?? 0) + (tarefa.horas ?? 0);
   }
-    print ('\nHoras por Status:');
-    horasPorStatus.forEach((status, horas) => print('$status: $horas horas'));
-
-  print('\nTarefas com dados incompletos');
-  for (Map<String, dynamic> map in dadosTarefas) {
-    if (map['titulo'] == null || map['responsavel'] == null || map['status'] == null || map['prioridade'] == null || map['valor'] == null || map['horas'] == null) {
-      Tarefa tarefaIncompleta = Tarefa.fromMap(map);
-      tarefaIncompleta.exibirResumo();
+  
+  // Identificar tarefas com dados incompletos
+  List<String> tarefasIncompletas = [];
+  for (Map<String, dynamic> tarefa in dadosTarefas) {
+    if (tarefa['titulo'] == null || tarefa['responsavel'] == null || tarefa['status'] == null || tarefa['prioridade'] == null ||
+        tarefa['valor'] == null || tarefa['horas'] == null){ tarefasIncompletas.add(' - ID: ${tarefa['id']} | ${tarefa['titulo'] ?? 'Sem título'} ' );
     }
   }
   
+  // Identificar status únicos
   Set<String> statusUnicos = {};
-  for (var tarefa in tarefas) {
+  for (Tarefa tarefa in tarefas) {
     statusUnicos.add(tarefa.status ?? 'Sem status');
   }
-  print('\nStatus Únicos');
-    for (var status in statusUnicos) {
-    print(status);
-  }
+  
+  print('\n============= RESUMO FINAL =============\n');
+  print ('Total de Tarefas analisadas: ${tarefas.length}');
+  print ('Total de Tarefas Concluídas: ${tarefasConcluidas.length}');
+  print ('Total de Tarefas Pendentes: ${tarefasPendentes.length}');
+  print ('Total de Tarefas em Andamento: ${tarefasEmAndamento.length}');
+  print ('Total de Tarefas Canceladas: ${tarefasCanceladas.length}');
+  print ('Valor Total das Tarefas: R\$ ${totalValor.toStringAsFixed(2)}');
+  print (tarefasPendentes.isEmpty ? 'Não há taredas pendentes para calcular média.': 'Valor Médio das Tarefas Pendentes: R\$ ${mediaPendentes.toStringAsFixed(2)}');
+  print ('\nHoras por Status: ');
+  horasPorStatus.forEach((status, horas) => print('- $status: $horas horas'));
+  print ('\nStatus Únicos: ');
+  statusUnicos.forEach((status) => print('- $status'));
+  print ('\nTarefas com Dados Incompletos:');
+    tarefasIncompletas.forEach((tarefa) => print(tarefa));
+
 }  
+
+
 
 
