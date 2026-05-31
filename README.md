@@ -42,5 +42,5 @@ VS Code
 GitHub / GitFlow
 Links
 Repositório: https://github.com/luizflorenzo-glitch/taskreport-dart-SCTEC
-Vídeo: (adicionar após gravar)
+Vídeo: https://drive.google.com/file/d/1D7YzdB07UrF0Iogir2WIZvoAgknmVm2Z/view?usp=drive_link
 Kanban: https://trello.com/b/hzmtCV0R
